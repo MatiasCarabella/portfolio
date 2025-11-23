@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Language
   initLanguage();
 
+  // Initialize Active Navigation
+  initActiveNavigation();
+
   // Fetch Projects
   fetchProjects();
 });
@@ -103,7 +106,7 @@ function createProjectCard(repo) {
   return `
     <div class="project-card">
       <h3 class="project-name">${repo.name}</h3>
-      <p class="project-desc">${repo.description || 'No description available.'}</p>
+      <p class="project-desc">${repo.description || ''}</p>
       <div class="project-meta">
         <div class="project-lang">
           <span class="lang-dot" style="background-color: ${langColor}"></span>
@@ -139,23 +142,69 @@ function renderPlaceholders(container) {
   `).join('');
 }
 
+// Active Navigation Logic
+function initActiveNavigation() {
+  const sections = document.querySelectorAll('section[id], main[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  function updateActiveNav() {
+    let current = '';
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      if (scrollY >= sectionTop - 200) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${current}`) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  // Smooth scroll for nav links
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const targetId = href.substring(1);
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+
+  window.addEventListener('scroll', updateActiveNav);
+  updateActiveNav(); // Initial call
+}
+
 // Language Logic
 const translations = {
   en: {
+    'nav.about': 'About',
     'nav.experience': 'Experience',
     'nav.stack': 'Stack',
     'nav.projects': 'Projects',
     'nav.cv': 'CV',
     'hero.subtitle': 'Backend Software Engineer',
     'hero.description': 'Building robust, scalable systems and exploring modern technologies.',
-    'hero.cta': 'View Experience',
+    'hero.cta': 'About Me',
     'experience.title': 'Experience',
     'experience.ml.date': 'January 2025 - Present',
     'experience.ml.title': 'Software Engineer',
     'experience.ml.location': 'Buenos Aires, Argentina',
-    'experience.ml.desc1': 'Development of the \'Broadcast Channels\' platform, allowing Mercado Libre\'s sellers to schedule and send targeted communications to their followers.',
-    'experience.ml.desc2': 'Applied SOLID principles, Clean Code methodologies, and asynchronous operations (Consumers, Jobs, Sinks) to build scalable systems.',
+    'experience.ml.desc1': 'Development of the \'Broadcast Channels\' platform, allowing Mercado Libre\'s sellers to schedule and send targeted communications to their followers. The platform includes Stories functionality (similar to Instagram) and features AI-generated product images.',
+    'experience.ml.desc2': 'Applied SOLID principles, Clean Code methodologies, and asynchronous operations (Consumers, Jobs, Sinks) to build highly scalable systems.',
     'experience.ml.desc3': 'Cybersecurity specialist: Responsible for continuous vulnerability scanning and integrating secure development practices (S-SDLC).',
+    'experience.ml.desc8': 'Led the migration of work repositories from Java 17 to Java 21, ensuring compatibility and leveraging the latest language features.',
     'experience.ml.desc4': 'Early adopter and promoter of generative AI tools such as Copilot, Cursor and Windsurf.',
     'experience.ml.desc5': 'NoSQL database storage and use of ElasticSearch as search engine.',
     'experience.ml.desc6': 'Monitoring and log control through Datadog, Kibana, Grafana and New Relic.',
@@ -187,6 +236,10 @@ const translations = {
     'experience.cloud.tc.location': 'Buenos Aires, Argentina',
     'experience.cloud.tc.desc1': 'Surveying, designing, and automating processes through custom scripts for Zoho applications (CRM, Finances, Business Intelligence).',
     'experience.cloud.tc.desc2': 'Providing training to internal teams and clients on specific developments and applications.',
+    'about.title': 'About Me',
+    'about.greeting': 'Hello! I\'m Matías, a Software Engineer from Argentina 🇦🇷',
+    'about.paragraph1': 'I\'m a software developer specializing in Backend development, with a passion for artificial intelligence and cybersecurity. I stay up to date with the latest technologies and best practices.',
+    'about.paragraph2': 'Currently, I work as a Software Engineer at Mercado Libre, where I focus on developing secure and scalable applications capable of handling millions of concurrent users. At the same time, I am completing my Bachelor\'s degree in Computer Science at Universidad Siglo 21.',
     'stack.title': 'Technology Stack',
     'projects.title': 'My Projects',
     'projects.loading': 'Loading projects...',
@@ -196,20 +249,22 @@ const translations = {
     'footer.rights': 'All rights reserved.'
   },
   es: {
+    'nav.about': 'Sobre Mí',
     'nav.experience': 'Experiencia',
     'nav.stack': 'Tecnologías',
     'nav.projects': 'Proyectos',
     'nav.cv': 'CV',
     'hero.subtitle': 'Ingeniero de Software Backend',
     'hero.description': 'Construyendo sistemas robustos y escalables, explorando tecnologías modernas.',
-    'hero.cta': 'Ver Experiencia',
+    'hero.cta': 'Sobre Mí',
     'experience.title': 'Experiencia',
     'experience.ml.date': 'Enero 2025 - Presente',
     'experience.ml.title': 'Ingeniero de Software',
     'experience.ml.location': 'Buenos Aires, Argentina',
-    'experience.ml.desc1': 'Desarrollo de la plataforma \'Broadcast Channels\', permitiendo a los vendedores de Mercado Libre programar y enviar comunicaciones dirigidas a sus seguidores.',
-    'experience.ml.desc2': 'Aplicación de principios SOLID, metodologías de Clean Code y operaciones asincrónicas (Consumers, Jobs, Sinks) para construir sistemas escalables.',
+    'experience.ml.desc1': 'Desarrollo de la plataforma \'Canales de difusión\', permitiendo a los vendedores de Mercado Libre programar y enviar comunicaciones dirigidas a sus seguidores. La plataforma incluye funcionalidad de Stories (similar a Instagram) y cuenta con imágenes de productos generadas por IA.',
+    'experience.ml.desc2': 'Aplicación de principios SOLID, metodologías de Clean Code y operaciones asincrónicas (Consumers, Jobs, Sinks) para construir sistemas altamente escalables.',
     'experience.ml.desc3': 'Especialista en ciberseguridad: Responsable del escaneo continuo de vulnerabilidades e integración de prácticas de desarrollo seguro (S-SDLC).',
+    'experience.ml.desc8': 'Lideré la migración de los repositorios de trabajo de Java 17 a Java 21, asegurando compatibilidad y aprovechando las últimas características del lenguaje.',
     'experience.ml.desc4': 'Early adopter y promotor de herramientas de IA generativa como Copilot, Cursor y Windsurf.',
     'experience.ml.desc5': 'Almacenamiento en bases de datos NoSQL y uso de ElasticSearch como motor de búsqueda.',
     'experience.ml.desc6': 'Monitoreo y control de logs a través de Datadog, Kibana, Grafana y New Relic.',
@@ -241,6 +296,10 @@ const translations = {
     'experience.cloud.tc.location': 'Buenos Aires, Argentina',
     'experience.cloud.tc.desc1': 'Relevamiento, diseño y automatización de procesos mediante scripts personalizados para aplicaciones de Zoho (CRM, Finanzas, Business Intelligence).',
     'experience.cloud.tc.desc2': 'Capacitación a equipos internos y clientes sobre desarrollos específicos y aplicaciones.',
+    'about.title': 'Sobre Mí',
+    'about.greeting': '¡Hola! Soy Matías, un Ingeniero de Software de Argentina 🇦🇷',
+    'about.paragraph1': 'Soy un desarrollador de software especializado en el Backend, con pasión por la inteligencia artificial y la seguridad informática. Me mantengo al día con las últimas tecnologías y mejores prácticas.',
+    'about.paragraph2': 'Actualmente trabajo como Software Engineer en Mercado Libre, donde me especializo en el desarrollo de aplicaciones seguras y escalables capaces de soportar millones de usuarios concurrentes. En simultáneo, estoy terminando de cursar la Licenciatura en Informática en la Universidad Siglo 21.',
     'stack.title': 'Stack Tecnológico',
     'projects.title': 'Mis Proyectos',
     'projects.loading': 'Cargando proyectos...',
