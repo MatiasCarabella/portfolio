@@ -10,6 +10,8 @@
   --hero-gradient: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
   --button-text: #ffffff;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --text-gradient: linear-gradient(to right, #1e3a8a, #06b6d4);
+  /* Dark Blue to Cyan */
 }
 
 [data-theme="dark"] {
@@ -90,7 +92,8 @@ body {
   color: var(--primary-color);
 }
 
-#theme-toggle {
+#theme-toggle,
+#lang-toggle {
   background: none;
   border: none;
   cursor: pointer;
@@ -101,9 +104,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 600;
 }
 
-#theme-toggle:hover {
+#theme-toggle:hover,
+#lang-toggle:hover {
   background-color: var(--card-border);
 }
 

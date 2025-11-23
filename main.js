@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Theme
   initTheme();
 
+  // Initialize Language
+  initLanguage();
+
   // Fetch Projects
   fetchProjects();
 });
@@ -133,4 +136,66 @@ function renderPlaceholders(container) {
       </div>
     </div>
   `).join('');
+}
+
+// Language Logic
+const translations = {
+  en: {
+    'nav.stack': 'Stack',
+    'nav.projects': 'Projects',
+    'hero.subtitle': 'Backend Software Engineer',
+    'hero.description': 'Building robust, scalable systems and exploring modern technologies.',
+    'hero.cta': 'View Projects',
+    'stack.title': 'Technology Stack',
+    'projects.title': 'My Projects',
+    'projects.loading': 'Loading projects...',
+    'footer.rights': 'All rights reserved.'
+  },
+  es: {
+    'nav.stack': 'Tecnologías',
+    'nav.projects': 'Proyectos',
+    'hero.subtitle': 'Ingeniero de Software Backend',
+    'hero.description': 'Construyendo sistemas robustos y escalables, explorando tecnologías modernas.',
+    'hero.cta': 'Ver Proyectos',
+    'stack.title': 'Stack Tecnológico',
+    'projects.title': 'Mis Proyectos',
+    'projects.loading': 'Cargando proyectos...',
+    'footer.rights': 'Todos los derechos reservados.'
+  }
+};
+
+function initLanguage() {
+  const langToggle = document.getElementById('lang-toggle');
+  const savedLang = localStorage.getItem('language') || 'en';
+
+  // Set initial state
+  setLanguage(savedLang);
+
+  if (langToggle) {
+    langToggle.addEventListener('click', () => {
+      const currentLang = document.documentElement.getAttribute('lang') || 'en';
+      const newLang = currentLang === 'en' ? 'es' : 'en';
+      setLanguage(newLang);
+    });
+  }
+}
+
+function setLanguage(lang) {
+  document.documentElement.setAttribute('lang', lang);
+  localStorage.setItem('language', lang);
+
+  // Update toggle text
+  const langToggle = document.getElementById('lang-toggle');
+  if (langToggle) {
+    langToggle.textContent = lang.toUpperCase();
+  }
+
+  // Update text content
+  const elements = document.querySelectorAll('[data-i18n]');
+  elements.forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+  });
 }
