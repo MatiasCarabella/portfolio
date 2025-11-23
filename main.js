@@ -207,7 +207,7 @@ const translations = {
     'experience.ml.desc8': 'Led the migration of work repositories from Java 17 to Java 21, ensuring compatibility and leveraging the latest language features.',
     'experience.ml.desc4': 'Early adopter and promoter of generative AI tools such as Copilot, Cursor and Windsurf.',
     'experience.ml.desc5': 'NoSQL database storage and use of ElasticSearch as search engine.',
-    'experience.ml.desc6': 'Monitoring and log control through Datadog, Kibana, Grafana and New Relic.',
+    'experience.ml.desc6': 'Observability and monitoring through Datadog, Kibana, Grafana and New Relic.',
     'experience.ml.desc7': 'Authored detailed technical documentation in Docsify, Swagger and AsyncAPI.',
     'experience.aivo.duration': '3 years 10 months',
     'experience.aivo.sr.title': 'SR Integration Developer',
@@ -216,7 +216,7 @@ const translations = {
     'experience.aivo.sr.desc1': 'Design and development of integrations between Aivo\'s virtual assistant and systems of banks, universities, telecommunications, and energy companies using Node.js/JavaScript, Laravel/PHP, and leveraging the OpenAI API.',
     'experience.aivo.sr.desc2': 'QA via Integration Tests, Code Reviews and SonarCloud.',
     'experience.aivo.sr.desc3': 'DB Management using MySQL and MongoDB.',
-    'experience.aivo.sr.desc4': 'In charge of go live process.',
+    'experience.aivo.sr.desc4': 'Responsible for production deployments and releases.',
     'experience.aivo.sr.desc5': 'Log Monitoring with AWS CloudWatch and Sentry.',
     'experience.aivo.sr.desc6': 'Functional analysis and information gathering to kickstart projects.',
     'experience.aivo.sr.desc7': 'Use of Docker and Jenkins (CI/CD) in development pipeline.',
@@ -244,8 +244,8 @@ const translations = {
     'projects.title': 'My Projects',
     'projects.loading': 'Loading projects...',
     'cv.title': 'CV',
-    'cv.description': 'Get a PDF copy of my resume',
-    'cv.button': 'Download CV',
+    'cv.description': 'View my resume as a PDF',
+    'cv.button': 'View CV',
     'footer.rights': 'All rights reserved.'
   },
   es: {
@@ -268,7 +268,7 @@ const translations = {
     'experience.ml.desc8': 'Migración de los repositorios de trabajo de Java 17 a Java 21, asegurando compatibilidad y aprovechando las últimas características del lenguaje.',
     'experience.ml.desc4': 'Early adopter y promotor de herramientas de IA generativa como Copilot, Cursor y Windsurf.',
     'experience.ml.desc5': 'Almacenamiento en bases de datos NoSQL y uso de ElasticSearch como motor de búsqueda.',
-    'experience.ml.desc6': 'Monitoreo y control de logs a través de Datadog, Kibana, Grafana y New Relic.',
+    'experience.ml.desc6': 'Observabilidad y monitoreo a través de Datadog, Kibana, Grafana y New Relic.',
     'experience.ml.desc7': 'Creación de documentación técnica detallada en Docsify, Swagger y AsyncAPI.',
     'experience.aivo.duration': '3 años 10 meses',
     'experience.aivo.sr.title': 'Desarrollador de Integraciones SR',
@@ -277,7 +277,7 @@ const translations = {
     'experience.aivo.sr.desc1': 'Diseño y desarrollo de integraciones entre el asistente virtual de Aivo y sistemas de bancos, universidades, telecomunicaciones y compañías de energía usando Node.js/JavaScript, Laravel/PHP, y aprovechando la API de OpenAI.',
     'experience.aivo.sr.desc2': 'QA mediante Integration Tests, Code Reviews y SonarCloud.',
     'experience.aivo.sr.desc3': 'Gestión de BD usando MySQL y MongoDB.',
-    'experience.aivo.sr.desc4': 'Encargado del proceso de go live.',
+    'experience.aivo.sr.desc4': 'Responsable de los despliegues y puestas en producción.',
     'experience.aivo.sr.desc5': 'Monitoreo de logs con AWS CloudWatch y Sentry.',
     'experience.aivo.sr.desc6': 'Análisis funcional y recopilación de información para iniciar proyectos.',
     'experience.aivo.sr.desc7': 'Uso de Docker y Jenkins (CI/CD) en pipeline de desarrollo.',
@@ -305,8 +305,8 @@ const translations = {
     'projects.title': 'Mis Proyectos',
     'projects.loading': 'Cargando proyectos...',
     'cv.title': 'CV',
-    'cv.description': 'Obtén una copia en PDF de mi currículum',
-    'cv.button': 'Descargar CV',
+    'cv.description': 'Ver mi currículum en PDF',
+    'cv.button': 'Ver CV',
     'footer.rights': 'Todos los derechos reservados.'
   }
 };
