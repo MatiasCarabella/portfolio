@@ -347,12 +347,10 @@ body {
   border-radius: 8px;
   background-color: rgba(0,0,0,0.03);
   color: var(--primary-color);
+  object-fit: contain;
 }
 
-/* Colorize Java icon to pure red */
-img[alt="Java"] {
-  filter: brightness(0) saturate(100%) invert(27%) sepia(100%) saturate(10000%) hue-rotate(-10deg);
-}
+/* Java icon uses local SVG with correct colors - no filter needed */
 
 .tech-name {
   font-weight: 600;
