@@ -145,6 +145,7 @@ const translations = {
     'nav.experience': 'Experience',
     'nav.stack': 'Stack',
     'nav.projects': 'Projects',
+    'nav.cv': 'CV',
     'hero.subtitle': 'Backend Software Engineer',
     'hero.description': 'Building robust, scalable systems and exploring modern technologies.',
     'hero.cta': 'View Experience',
@@ -189,7 +190,7 @@ const translations = {
     'stack.title': 'Technology Stack',
     'projects.title': 'My Projects',
     'projects.loading': 'Loading projects...',
-    'cv.title': 'Download My CV',
+    'cv.title': 'CV',
     'cv.description': 'Get a PDF copy of my resume',
     'cv.button': 'Download CV',
     'footer.rights': 'All rights reserved.'
@@ -198,6 +199,7 @@ const translations = {
     'nav.experience': 'Experiencia',
     'nav.stack': 'Tecnologías',
     'nav.projects': 'Proyectos',
+    'nav.cv': 'CV',
     'hero.subtitle': 'Ingeniero de Software Backend',
     'hero.description': 'Construyendo sistemas robustos y escalables, explorando tecnologías modernas.',
     'hero.cta': 'Ver Experiencia',
@@ -242,7 +244,7 @@ const translations = {
     'stack.title': 'Stack Tecnológico',
     'projects.title': 'Mis Proyectos',
     'projects.loading': 'Cargando proyectos...',
-    'cv.title': 'Descargar Mi CV',
+    'cv.title': 'CV',
     'cv.description': 'Obtén una copia en PDF de mi currículum',
     'cv.button': 'Descargar CV',
     'footer.rights': 'Todos los derechos reservados.'
