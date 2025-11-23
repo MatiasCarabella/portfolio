@@ -168,6 +168,7 @@ body {
   margin-bottom: 1rem;
   background: var(--text-gradient, linear-gradient(to right, var(--primary-color), #a855f7));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.1;
 }
@@ -190,7 +191,6 @@ body {
   padding: 0.75rem 2rem;
   background-color: var(--primary-color);
   color: white;
-  /* Always white for contrast on primary color */
   text-decoration: none;
   border-radius: 9999px;
   font-weight: 600;
@@ -201,6 +201,93 @@ body {
 .cta-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.23);
+}
+
+/* Experience */
+.experience-section {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.experience-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.experience-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.experience-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary-color);
+}
+
+.company-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--card-border);
+}
+
+.company-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.date-range {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+
+.role-item {
+  margin-bottom: 1.5rem;
+}
+
+.role-item:last-child {
+  margin-bottom: 0;
+}
+
+.role-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.role-location {
+  font-size: 0.875rem;
+  color: var(--secondary-color);
+  margin-bottom: 0.75rem;
+}
+
+.role-description {
+  list-style-position: outside;
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.role-description li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.role-description li:last-child {
+  margin-bottom: 0;
 }
 
 /* Tech Stack */
@@ -277,7 +364,6 @@ body {
   flex-direction: column;
   height: 100%;
   opacity: 1;
-  /* Ensure solid opacity by default */
 }
 
 .project-card:hover {
@@ -336,6 +422,46 @@ body {
   background-color: var(--card-border);
 }
 
+/* CV Section */
+.cv-section {
+  padding: 4rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cv-description {
+  color: var(--secondary-color);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.cv-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+}
+
+.cv-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.23);
+}
+
+.cv-button svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
 /* Footer */
 .footer {
   text-align: center;
@@ -363,6 +489,10 @@ body {
   fill: currentColor;
 }
 
+.social-icon path {
+  fill: currentColor;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero-title {
@@ -371,5 +501,15 @@ body {
 
   .projects-grid {
     grid-template-columns: 1fr;
+  }
+
+  .company-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
   }
 }
