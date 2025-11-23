@@ -54,8 +54,8 @@ function initTheme() {
 async function fetchProjects() {
   const projectsGrid = document.getElementById('projects-grid');
   const username = 'MatiasCarabella';
-  // Increased per_page to fetch more repos
-  const apiUrl = `https://api.github.com/users/${username}/repos?sort=updated&per_page=12`;
+  // Fetch all repos (GitHub API max is 100 per page)
+  const apiUrl = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`;
 
   try {
     const response = await fetch(apiUrl);
@@ -63,9 +63,8 @@ async function fetchProjects() {
 
     const data = await response.json();
 
-    // Filter out forks if desired, or just show everything. 
-    // Showing top 12 non-forks
-    const projects = data.filter(repo => !repo.fork).slice(0, 12);
+    // Filter out forks and show all non-forks
+    const projects = data.filter(repo => !repo.fork);
 
     if (projects.length === 0) {
       renderPlaceholders(projectsGrid);
@@ -201,7 +200,7 @@ const translations = {
     'experience.ml.date': 'January 2025 - Present',
     'experience.ml.title': 'Software Engineer',
     'experience.ml.location': 'Buenos Aires, Argentina',
-    'experience.ml.desc1': 'Development of the \'Broadcast Channels\' platform, allowing Mercado Libre\'s sellers to schedule and send targeted communications to their followers. The platform includes Stories functionality (similar to Instagram) and features AI-generated product images.',
+    'experience.ml.desc1': 'Developed the \'Broadcast Channels\' platform, enabling Mercado Libre sellers to create Stories with AI-enhanced product images and send targeted communications with their followers.',
     'experience.ml.desc2': 'Applied SOLID principles, Clean Code methodologies, and asynchronous operations (Consumers, Jobs, Sinks) to build highly scalable systems.',
     'experience.ml.desc3': 'Cybersecurity specialist: Responsible for continuous vulnerability scanning and integrating secure development practices (S-SDLC).',
     'experience.ml.desc8': 'Led the migration of work repositories from Java 17 to Java 21, ensuring compatibility and leveraging the latest language features.',
@@ -213,7 +212,7 @@ const translations = {
     'experience.aivo.sr.title': 'SR Integration Developer',
     'experience.aivo.sr.date': 'March 2023 - January 2025 (1 year 11 months)',
     'experience.aivo.sr.location': 'Buenos Aires, Argentina',
-    'experience.aivo.sr.desc1': 'Design and development of integrations between Aivo\'s virtual assistant and systems of banks, universities, telecommunications, and energy companies using Node.js/JavaScript, Laravel/PHP and OpenAI.',
+    'experience.aivo.sr.desc1': 'Design and development of integrations between Aivo\'s virtual assistant and systems of banks, universities, telecommunications, and energy companies using Node.js/JavaScript, Laravel/PHP, and leveraging the OpenAI API.',
     'experience.aivo.sr.desc2': 'QA via Integration Tests, Code Reviews and SonarCloud.',
     'experience.aivo.sr.desc3': 'DB Management using MySQL and MongoDB.',
     'experience.aivo.sr.desc4': 'In charge of go live process.',
@@ -238,8 +237,8 @@ const translations = {
     'experience.cloud.tc.desc2': 'Providing training to internal teams and clients on specific developments and applications.',
     'about.title': 'About Me',
     'about.greeting': 'Hello! I\'m Matías, a Software Engineer from Argentina 🇦🇷',
-    'about.paragraph1': 'I\'m a software developer specializing in Backend development, with a passion for artificial intelligence and cybersecurity. I stay up to date with the latest technologies and best practices.',
-    'about.paragraph2': 'Currently, I work as a Software Engineer at Mercado Libre, where I focus on developing secure and scalable applications capable of handling millions of concurrent users. At the same time, I am completing my Bachelor\'s degree in Computer Science at Universidad Siglo 21.',
+    'about.paragraph1': 'Software developer specializing in Backend development, with a genuine passion for artificial intelligence and cybersecurity. I stay constantly updated with the latest technologies and industry best practices.',
+    'about.paragraph2': 'Currently, I work as a Software Engineer at <a href="https://investor.mercadolibre.com/" target="_blank" rel="noopener noreferrer">Mercado Libre</a>, where I focus on developing secure and scalable applications capable of handling millions of concurrent users. At the same time, I am completing my Bachelor\'s degree in Computer Science at <a href="https://www.21.edu.ar" target="_blank" rel="noopener noreferrer">Universidad Siglo 21</a>.',
     'stack.title': 'Technology Stack',
     'projects.title': 'My Projects',
     'projects.loading': 'Loading projects...',
@@ -261,10 +260,10 @@ const translations = {
     'experience.ml.date': 'Enero 2025 - Presente',
     'experience.ml.title': 'Ingeniero de Software',
     'experience.ml.location': 'Buenos Aires, Argentina',
-    'experience.ml.desc1': 'Desarrollo de la plataforma \'Canales de difusión\', permitiendo a los vendedores de Mercado Libre programar y enviar comunicaciones dirigidas a sus seguidores. La plataforma incluye funcionalidad de Stories (similar a Instagram) y cuenta con imágenes de productos generadas por IA.',
+    'experience.ml.desc1': 'Desarrollo de la plataforma \'Canales de difusión\', permitiendo a los vendedores de Mercado Libre crear Stories con imágenes de productos mejoradas por IA y enviar comunicaciones dirigidas a sus seguidores.',
     'experience.ml.desc2': 'Aplicación de principios SOLID, metodologías de Clean Code y operaciones asincrónicas (Consumers, Jobs, Sinks) para construir sistemas altamente escalables.',
     'experience.ml.desc3': 'Especialista en ciberseguridad: Responsable del escaneo continuo de vulnerabilidades e integración de prácticas de desarrollo seguro (S-SDLC).',
-    'experience.ml.desc8': 'Lideré la migración de los repositorios de trabajo de Java 17 a Java 21, asegurando compatibilidad y aprovechando las últimas características del lenguaje.',
+    'experience.ml.desc8': 'Migración de los repositorios de trabajo de Java 17 a Java 21, asegurando compatibilidad y aprovechando las últimas características del lenguaje.',
     'experience.ml.desc4': 'Early adopter y promotor de herramientas de IA generativa como Copilot, Cursor y Windsurf.',
     'experience.ml.desc5': 'Almacenamiento en bases de datos NoSQL y uso de ElasticSearch como motor de búsqueda.',
     'experience.ml.desc6': 'Monitoreo y control de logs a través de Datadog, Kibana, Grafana y New Relic.',
@@ -273,7 +272,7 @@ const translations = {
     'experience.aivo.sr.title': 'Desarrollador de Integraciones SR',
     'experience.aivo.sr.date': 'Marzo 2023 - Enero 2025 (1 año 11 meses)',
     'experience.aivo.sr.location': 'Buenos Aires, Argentina',
-    'experience.aivo.sr.desc1': 'Diseño y desarrollo de integraciones entre el asistente virtual de Aivo y sistemas de bancos, universidades, telecomunicaciones y compañías de energía usando Node.js/JavaScript, Laravel/PHP y OpenAI.',
+    'experience.aivo.sr.desc1': 'Diseño y desarrollo de integraciones entre el asistente virtual de Aivo y sistemas de bancos, universidades, telecomunicaciones y compañías de energía usando Node.js/JavaScript, Laravel/PHP, y aprovechando la API de OpenAI.',
     'experience.aivo.sr.desc2': 'QA mediante Integration Tests, Code Reviews y SonarCloud.',
     'experience.aivo.sr.desc3': 'Gestión de BD usando MySQL y MongoDB.',
     'experience.aivo.sr.desc4': 'Encargado del proceso de go live.',
@@ -297,9 +296,9 @@ const translations = {
     'experience.cloud.tc.desc1': 'Relevamiento, diseño y automatización de procesos mediante scripts personalizados para aplicaciones de Zoho (CRM, Finanzas, Business Intelligence).',
     'experience.cloud.tc.desc2': 'Capacitación a equipos internos y clientes sobre desarrollos específicos y aplicaciones.',
     'about.title': 'Sobre Mí',
-    'about.greeting': '¡Hola! Soy Matías, un Ingeniero de Software de Argentina 🇦🇷',
-    'about.paragraph1': 'Soy un desarrollador de software especializado en el Backend, con pasión por la inteligencia artificial y la seguridad informática. Me mantengo al día con las últimas tecnologías y mejores prácticas.',
-    'about.paragraph2': 'Actualmente trabajo como Software Engineer en Mercado Libre, donde me especializo en el desarrollo de aplicaciones seguras y escalables capaces de soportar millones de usuarios concurrentes. En simultáneo, estoy terminando de cursar la Licenciatura en Informática en la Universidad Siglo 21.',
+    'about.greeting': 'Hola! Soy Matías, un Desarrollador de Software de Argentina 🇦🇷',
+    'about.paragraph1': 'Desarrollador de software especializado en Backend, con una pasión genuina por la inteligencia artificial y la seguridad informática. Me mantengo constantemente actualizado con las últimas tecnologías y mejores prácticas de la industria.',
+    'about.paragraph2': 'Actualmente trabajo como Software Engineer en <a href="https://investor.mercadolibre.com/" target="_blank" rel="noopener noreferrer">Mercado Libre</a>, donde me especializo en el desarrollo de aplicaciones seguras y escalables capaces de soportar millones de usuarios concurrentes. En simultáneo, estoy terminando de cursar la Licenciatura en Informática en la <a href="https://www.21.edu.ar" target="_blank" rel="noopener noreferrer">Universidad Siglo 21</a>.',
     'stack.title': 'Stack Tecnológico',
     'projects.title': 'Mis Proyectos',
     'projects.loading': 'Cargando proyectos...',
@@ -341,7 +340,12 @@ function setLanguage(lang) {
   elements.forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang] && translations[lang][key]) {
-      el.textContent = translations[lang][key];
+      // Use innerHTML for elements that may contain HTML (like links)
+      if (key === 'about.paragraph2') {
+        el.innerHTML = translations[lang][key];
+      } else {
+        el.textContent = translations[lang][key];
+      }
     }
   });
 

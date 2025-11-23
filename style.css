@@ -244,6 +244,18 @@ body {
   margin-bottom: 0;
 }
 
+.about-content a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.about-content a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
 .about-greeting {
   font-size: 1.375rem !important;
   font-weight: 600 !important;
@@ -292,6 +304,17 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-color);
+}
+
+.company-name a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.company-name a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 .date-range {
@@ -410,6 +433,11 @@ img[alt="GitHub"] {
 /* Dark mode: GitHub should be white */
 [data-theme="dark"] img[alt="GitHub"] {
   filter: brightness(0) saturate(100%) invert(1);
+}
+
+/* ElasticSearch icon - make grey color white in dark mode */
+[data-theme="dark"] .elasticsearch-grey {
+  fill: #ffffff;
 }
 
 .tech-name {
