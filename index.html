@@ -211,25 +211,25 @@
 
       <div class="tech-sections">
         <div class="tech-subsection">
-          <h3 class="tech-section-title">Languages</h3>
+          <h3 class="tech-section-title" data-i18n="stack.languages">Languages</h3>
           <div class="tech-grid">
             <div class="tech-item"><img class="tech-icon" data-slug="java" data-color="#007396" src="/assets/java.svg"
                 alt="Java"><span class="tech-name">Java</span></div>
-            <div class="tech-item"><img class="tech-icon" src="/assets/python.svg" alt="Python"><span
-                class="tech-name">Python</span></div>
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/javascript"
                 alt="JavaScript"><span class="tech-name">JavaScript</span></div>
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/typescript"
                 alt="TypeScript"><span class="tech-name">TypeScript</span></div>
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/php" alt="PHP"><span
                 class="tech-name">PHP</span></div>
+            <div class="tech-item"><img class="tech-icon" src="/assets/python.svg" alt="Python"><span
+                class="tech-name">Python</span></div>
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/cplusplus" alt="C++"><span
                 class="tech-name">C++</span></div>
           </div>
         </div>
 
         <div class="tech-subsection">
-          <h3 class="tech-section-title">Frameworks &amp; Libraries</h3>
+          <h3 class="tech-section-title" data-i18n="stack.frameworks">Frameworks &amp; Libraries</h3>
           <div class="tech-grid">
             <!-- Java frameworks first (aligns with Languages order) -->
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/spring" alt="Spring"
@@ -237,11 +237,6 @@
                 class="tech-name">Spring Boot</span></div>
             <div class="tech-item"><img class="tech-icon" data-slug="javalin" data-color="#00A99D"
                 src="/assets/javalin.png" alt="Javalin"><span class="tech-name">Javalin</span></div>
-
-            <!-- Python -->
-            <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/fastapi" alt="FastAPI"
-                onerror="this.onerror=null;this.src='https://api.iconify.design/simple-icons:fastapi.svg'"><span
-                class="tech-name">FastAPI</span></div>
 
             <!-- JavaScript / TypeScript -->
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/nodedotjs" alt="Node.js"
@@ -255,11 +250,16 @@
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/laravel" alt="Laravel"
                 onerror="this.onerror=null;this.src='https://api.iconify.design/simple-icons:laravel.svg'"><span
                 class="tech-name">Laravel</span></div>
+
+            <!-- Python -->
+            <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/fastapi" alt="FastAPI"
+                onerror="this.onerror=null;this.src='https://api.iconify.design/simple-icons:fastapi.svg'"><span
+                class="tech-name">FastAPI</span></div>
           </div>
         </div>
 
         <div class="tech-subsection">
-          <h3 class="tech-section-title">Databases &amp; Search</h3>
+          <h3 class="tech-section-title" data-i18n="stack.databases">Databases &amp; Search</h3>
           <div class="tech-grid">
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/mysql" alt="MySQL"><span
                 class="tech-name">MySQL</span></div>
@@ -282,7 +282,7 @@
         </div>
 
         <div class="tech-subsection">
-          <h3 class="tech-section-title">Cloud, DevOps &amp; CI/CD</h3>
+          <h3 class="tech-section-title" data-i18n="stack.cloud">Cloud, DevOps &amp; CI/CD</h3>
           <div class="tech-grid">
             <div class="tech-item"><img class="tech-icon" data-slug="amazonaws" data-color="#ff9900"
                 src="https://cdn.simpleicons.org/amazonaws/ff9900" alt="AWS"
@@ -302,12 +302,19 @@
         </div>
 
         <div class="tech-subsection">
-          <h3 class="tech-section-title">Observability &amp; Monitoring</h3>
+          <h3 class="tech-section-title" data-i18n="stack.observability">Observability &amp; Monitoring</h3>
           <div class="tech-grid">
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/datadog" alt="Datadog"><span
                 class="tech-name">Datadog</span></div>
-            <div class="tech-item"><img class="tech-icon" src="/assets/kibana.svg" alt="Kibana"><span
-                class="tech-name">Kibana</span></div>
+            <div class="tech-item">
+              <svg class="tech-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" alt="Kibana">
+                <path fill="#f04e98" d="M112 0H12v48c17.3 0 33.54 4.453 47.73 12.188Zm0 0" />
+                <path class="kibana-dark" fill="#343741" d="M12 48v67.152l47.73-54.96A99.422 99.422 0 0 0 12 48" />
+                <path fill="#00bfb3"
+                  d="m70.04 66.621-48.974 56.406L16.738 128h93.258c-5.121-25.21-19.758-46.945-39.957-61.379" />
+              </svg>
+              <span class="tech-name">Kibana</span>
+            </div>
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/grafana" alt="Grafana"><span
                 class="tech-name">Grafana</span></div>
             <div class="tech-item"><img class="tech-icon" src="https://cdn.simpleicons.org/newrelic"

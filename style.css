@@ -526,6 +526,11 @@ img[alt="GitHub"] {
   fill: #ffffff;
 }
 
+/* Kibana icon - make grey color white in dark mode */
+[data-theme="dark"] .kibana-dark {
+  fill: #ffffff;
+}
+
 .tech-name {
   font-weight: 600;
   font-size: 1rem;
