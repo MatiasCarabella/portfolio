@@ -3,7 +3,7 @@ export class ParticleSystem {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
     this.particles = [];
-    this.mouse = { x: null, y: null, radius: 150 };
+    this.mouse = { x: null, y: null, radius: 150, lastX: null, lastY: null, lastMoveTime: 0 };
 
     this.resize();
     this.init();
@@ -11,8 +11,11 @@ export class ParticleSystem {
 
     window.addEventListener('resize', () => this.resize());
     window.addEventListener('mousemove', (e) => {
+      this.mouse.lastX = this.mouse.x;
+      this.mouse.lastY = this.mouse.y;
       this.mouse.x = e.x;
       this.mouse.y = e.y;
+      this.mouse.lastMoveTime = Date.now();
     });
     window.addEventListener('mouseout', () => {
       this.mouse.x = null;
@@ -67,7 +70,7 @@ export class ParticleSystem {
           const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
           const color = isDark ? '168, 85, 247' : '59, 130, 246'; // Purple or Primary Blue
 
-          this.ctx.strokeStyle = `rgba(${color}, ${opacityValue * 0.2})`; // Lower opacity for subtle lines
+          this.ctx.strokeStyle = `rgba(${color}, ${opacityValue * 0.05})`; // Lower opacity for subtle lines
           this.ctx.lineWidth = 1;
           this.ctx.beginPath();
           this.ctx.moveTo(this.particles[a].x, this.particles[a].y);
@@ -95,7 +98,7 @@ class Particle {
 
     // Get current theme color for dots
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const color = isDark ? 'rgba(168, 85, 247, 0.8)' : 'rgba(59, 130, 246, 0.8)';
+    const color = isDark ? 'rgba(168, 85, 247, 0.4)' : 'rgba(59, 130, 246, 0.4)';
 
     ctx.fillStyle = color;
     ctx.fill();
@@ -115,7 +118,10 @@ class Particle {
     let dy = mouse.y - this.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance < mouse.radius + this.size) {
+    // Only react if mouse has moved recently (within 100ms)
+    const isMoving = (Date.now() - mouse.lastMoveTime) < 100;
+
+    if (isMoving && distance < mouse.radius + this.size) {
       if (mouse.x < this.x && this.x < this.canvas.width - this.size * 10) {
         this.x += 3;
       }
@@ -131,7 +137,7 @@ class Particle {
     }
 
     // Move particle
-    this.x += this.directionX * 0.4; // Speed factor
-    this.y += this.directionY * 0.4;
+    this.x += this.directionX * 0.2; // Slower speed factor
+    this.y += this.directionY * 0.2;
   }
 }
