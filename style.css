@@ -417,7 +417,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background-color: rgba(0,0,0,0.03);
+  background-color: rgba(0, 0, 0, 0.03);
   color: var(--primary-color);
   object-fit: contain;
 }
