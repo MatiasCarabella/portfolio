@@ -1,11 +1,8 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  // If deploying to https://username.github.io/portfolio/
-  // base: '/portfolio/',
-  
-  // If deploying to https://username.github.io/ (custom domain or username.github.io repo)
-  base: '/',
+  // Base path for GitHub Pages deployment
+  base: '/portfolio/',
   
   build: {
     outDir: 'dist',
