@@ -84,6 +84,12 @@ html {
   gap: 2rem;
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .logo {
   font-weight: 700;
   font-size: 1.5rem;
@@ -149,6 +155,13 @@ html {
   align-items: center;
   justify-content: center;
   font-weight: 600;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+#lang-toggle {
+  font-size: 0.875rem;
+  margin-top: 2px;
 }
 
 #theme-toggle:hover,
@@ -608,6 +621,70 @@ img[alt="GitHub"] {
   gap: 2rem;
 }
 
+/* Carousel for mobile */
+.carousel-container {
+  position: relative;
+  overflow: visible;
+  display: none;
+  padding: 0 1rem;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1rem;
+  transition: transform 0.3s ease;
+  align-items: stretch;
+  overflow: visible;
+}
+
+.carousel-track .project-card.hidden {
+  display: none;
+}
+
+.carousel-track .project-card {
+  min-width: 80%;
+  max-width: 80%;
+  flex-shrink: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-track .project-card:not(:first-child) {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.carousel-track .project-card:hover {
+  transform: scale(0.95);
+}
+
+.carousel-track .project-card:active {
+  opacity: 0.9;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--card-border);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.carousel-dot.active {
+  background-color: var(--primary-color);
+  width: 24px;
+  border-radius: 4px;
+}
+
 .project-card {
   background-color: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -786,7 +863,11 @@ img[alt="GitHub"] {
   }
 
   .projects-grid {
-    grid-template-columns: 1fr;
+    display: none;
+  }
+
+  .carousel-container {
+    display: block;
   }
 
   .company-header {

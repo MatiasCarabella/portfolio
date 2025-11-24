@@ -66,6 +66,9 @@ async function fetchProjects() {
     
     // Generate dynamic filters based on available languages
     generateFilters(projects);
+    
+    // Initialize carousel for mobile
+    initCarousel(projects);
 
   } catch (error) {
     console.error('Error fetching repos:', error);
@@ -203,6 +206,132 @@ function initHeroCTA() {
   }
 }
 
+// Carousel Logic for Mobile
+function initCarousel(projects) {
+  const carouselTrack = document.getElementById('carousel-track');
+  const carouselDots = document.getElementById('carousel-dots');
+  
+  if (!carouselTrack || !carouselDots) return;
+  
+  // Populate carousel with project cards
+  carouselTrack.innerHTML = projects.map(repo => createProjectCard(repo)).join('');
+  
+  const cards = carouselTrack.querySelectorAll('.project-card');
+  let currentIndex = 0;
+  
+  // Create dots
+  carouselDots.innerHTML = projects.map((_, index) => 
+    `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`
+  ).join('');
+  
+  const dots = carouselDots.querySelectorAll('.carousel-dot');
+  
+  function updateCarousel(index) {
+    currentIndex = index;
+    const cardWidth = cards[0].offsetWidth;
+    const gap = 16; // 1rem gap
+    const containerPadding = 16; // 1rem padding
+    const offset = -(index * (cardWidth + gap)) + containerPadding;
+    carouselTrack.style.transform = `translateX(${offset}px)`;
+    
+    // Update dots
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === index);
+    });
+    
+    // Update cursor style and visual state for cards
+    cards.forEach((card, i) => {
+      card.style.cursor = i === index ? 'default' : 'pointer';
+      
+      // Reset all cards first
+      card.style.opacity = '0.5';
+      card.style.transform = 'scale(0.95)';
+      
+      // Highlight the focused card
+      if (i === index) {
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1)';
+      }
+    });
+  }
+  
+  // Dot navigation
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      updateCarousel(parseInt(dot.getAttribute('data-index')));
+    });
+  });
+  
+  // Click to advance (tap on card)
+  cards.forEach((card, index) => {
+    card.addEventListener('click', (e) => {
+      // Don't advance if clicking on a link
+      if (e.target.closest('a')) return;
+      
+      // Only advance if clicking on a non-focused card (side cards)
+      if (index !== currentIndex) {
+        updateCarousel(index);
+      }
+    });
+    
+    // Add visual feedback for non-focused cards
+    card.style.cursor = 'pointer';
+  });
+  
+  // Touch/swipe support
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let isDragging = false;
+  let startTime = 0;
+  
+  carouselTrack.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    startTime = Date.now();
+    isDragging = true;
+  });
+  
+  carouselTrack.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    currentX = e.touches[0].clientX;
+    currentY = e.touches[0].clientY;
+    
+    // Prevent vertical scroll if horizontal swipe is detected
+    const diffX = Math.abs(currentX - startX);
+    const diffY = Math.abs(currentY - startY);
+    
+    if (diffX > diffY && diffX > 10) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+  
+  carouselTrack.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    
+    const diffX = startX - currentX;
+    const diffY = Math.abs(startY - currentY);
+    const timeDiff = Date.now() - startTime;
+    
+    // Only trigger swipe if horizontal movement is greater than vertical
+    // and movement is significant enough
+    if (Math.abs(diffX) > diffY && Math.abs(diffX) > 30) {
+      // Fast swipe (velocity-based)
+      const velocity = Math.abs(diffX) / timeDiff;
+      
+      if (velocity > 0.3 || Math.abs(diffX) > 80) {
+        if (diffX > 0 && currentIndex < cards.length - 1) {
+          updateCarousel(currentIndex + 1);
+        } else if (diffX < 0 && currentIndex > 0) {
+          updateCarousel(currentIndex - 1);
+        }
+      }
+    }
+  });
+}
+
 // Project Filters Logic
 function initProjectFilters() {
   const filterButtons = document.querySelectorAll('.filter-btn');
@@ -215,8 +344,8 @@ function initProjectFilters() {
       filterButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
       
-      // Filter projects
-      const projectCards = document.querySelectorAll('.project-card');
+      // Filter projects in grid
+      const projectCards = document.querySelectorAll('#projects-grid .project-card');
       projectCards.forEach(card => {
         const language = card.getAttribute('data-language');
         
@@ -225,6 +354,52 @@ function initProjectFilters() {
         } else {
           card.classList.add('hidden');
         }
+      });
+      
+      // Update carousel for mobile
+      updateCarouselFilter(filter);
+    });
+  });
+}
+
+function updateCarouselFilter(filter) {
+  const carouselTrack = document.getElementById('carousel-track');
+  const carouselDots = document.getElementById('carousel-dots');
+  
+  if (!carouselTrack || !carouselDots) return;
+  
+  const allCards = carouselTrack.querySelectorAll('.project-card');
+  const visibleCards = [];
+  
+  // Show/hide cards based on filter
+  allCards.forEach(card => {
+    const language = card.getAttribute('data-language');
+    if (filter === 'all' || language === filter) {
+      card.classList.remove('hidden');
+      visibleCards.push(card);
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  
+  // Update dots to match visible cards
+  carouselDots.innerHTML = visibleCards.map((_, index) => 
+    `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`
+  ).join('');
+  
+  // Reset to first card
+  carouselTrack.style.transform = 'translateX(0)';
+  
+  // Re-attach dot listeners
+  const dots = carouselDots.querySelectorAll('.carousel-dot');
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const index = parseInt(dot.getAttribute('data-index'));
+      const offset = -index * (visibleCards[0].offsetWidth + 24);
+      carouselTrack.style.transform = `translateX(${offset}px)`;
+      
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === index);
       });
     });
   });

@@ -26,9 +26,8 @@
           <li><a href="#cv" data-i18n="nav.cv">CV</a></li>
         </ul>
       </div>
-      <div class="nav-right" style="display: flex; align-items: center; gap: 1rem;">
-        <button id="lang-toggle" aria-label="Toggle Language"
-          style="font-weight: 600; cursor: pointer; background: none; border: none; color: var(--text-color);">EN</button>
+      <div class="nav-right">
+        <button id="lang-toggle" aria-label="Toggle Language">EN</button>
         <button id="theme-toggle" aria-label="Toggle Dark Mode">
           <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -377,6 +376,12 @@
       <div id="projects-grid" class="projects-grid">
         <!-- Projects will be injected here -->
         <div class="loading-spinner" data-i18n="projects.loading">Loading projects...</div>
+      </div>
+      <div class="carousel-container">
+        <div class="carousel-track" id="carousel-track">
+          <!-- Carousel items will be injected here -->
+        </div>
+        <div class="carousel-dots" id="carousel-dots"></div>
       </div>
     </main>
 
