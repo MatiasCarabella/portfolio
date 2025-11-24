@@ -1,5 +1,5 @@
 # Portfolio
-
+<img width="1880" height="876" alt="image" src="https://github.com/user-attachments/assets/4c617b8c-7e0a-4a02-aad1-6a843a452bc7" />
 A modern, responsive portfolio website showcasing my experience, projects, and technical skills as a Software Engineer. Built with vanilla JavaScript and featuring smooth animations, dark/light themes, and bilingual support.
 
 ## 🚀 Features
@@ -70,15 +70,6 @@ Every push to the `main` branch will automatically:
 1. Build the project
 2. Deploy to GitHub Pages
 
-### Setup (One-time)
-
-1. Go to your repository Settings → Pages
-2. Under "Build and deployment":
-   - Source: **GitHub Actions**
-3. Push to main branch - deployment will happen automatically!
-
-Your site will be live at: `https://matiascarabella.github.io/portfolio/`
-
 ## 📝 License
 
 This project is open source and available under the [MIT License](LICENSE).
@@ -97,8 +88,8 @@ Feel free to reach out:
 - **Smart Carousel** - Click side cards to navigate, swipe gestures, and visual focus indicators
 - **Active Navigation** - Navbar highlights current section with smooth transitions
 - **Accessibility** - Semantic HTML, ARIA labels, and keyboard navigation support
-- **GitHub Integration** - Projects automatically sync with your latest repositories
+- **GitHub Integration** - The 'My Projects' section automatically syncs with my repositories
 
 ---
 
-Made with ❤️ by Matías Carabella
+Made with 💜 by Matías Carabella
