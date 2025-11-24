@@ -47,7 +47,7 @@ export const translations = {
         'experience.cloud.tc.date': 'February 2020 - July 2020 (6 months)',
         'experience.cloud.tc.location': 'Buenos Aires, Argentina',
         'experience.cloud.tc.desc1': 'Surveying, designing, and automating processes through custom scripts for Zoho applications (CRM, Finances, Business Intelligence).',
-        'experience.cloud.tc.desc2': 'Capacitación a equipos internos y clientes sobre desarrollos específicos y aplicaciones.',
+        'experience.cloud.tc.desc2': 'Providing training to internal teams and clients on specific developments and applications.',
         'about.title': 'About Me',
         'about.greeting': 'Hello! I\'m Matías, a Software Engineer from Argentina 🇦🇷',
         'about.paragraph1': 'I specialize in Backend development and enjoy diving deep into artificial intelligence and cybersecurity, always staying current with emerging technologies and best practices.',
