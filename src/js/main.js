@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Hero CTA smooth scroll
   initHeroCTA();
 
-  // Fetch Projects
+  // Fetch Projects (filters will be initialized automatically after fetch)
   fetchProjects();
 });
 
@@ -63,11 +63,50 @@ async function fetchProjects() {
     }
 
     projectsGrid.innerHTML = projects.map(repo => createProjectCard(repo)).join('');
+    
+    // Generate dynamic filters based on available languages
+    generateFilters(projects);
 
   } catch (error) {
     console.error('Error fetching repos:', error);
     renderPlaceholders(projectsGrid);
   }
+}
+
+function generateFilters(projects) {
+  const filtersContainer = document.querySelector('.projects-filters');
+  if (!filtersContainer) return;
+
+  // Count projects by language
+  const languageCounts = {};
+  projects.forEach(repo => {
+    const lang = repo.language;
+    if (lang) { // Only count projects with a language (exclude 'Other')
+      languageCounts[lang] = (languageCounts[lang] || 0) + 1;
+    }
+  });
+
+  // Sort languages by count (descending)
+  const sortedLanguages = Object.entries(languageCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([lang]) => lang);
+
+  // Get current language for translations
+  const currentLang = document.documentElement.getAttribute('lang') || 'en';
+  const allText = translations[currentLang]['projects.filter.all'] || 'All';
+
+  // Generate filter buttons HTML
+  const filtersHTML = [
+    `<button class="filter-btn active" data-filter="all" data-i18n="projects.filter.all">${allText}</button>`,
+    ...sortedLanguages.map(lang => 
+      `<button class="filter-btn" data-filter="${lang}">${lang}</button>`
+    )
+  ].join('');
+
+  filtersContainer.innerHTML = filtersHTML;
+  
+  // Re-initialize filter event listeners
+  initProjectFilters();
 }
 
 function getLanguageColor(language) {
@@ -93,14 +132,16 @@ function getLanguageColor(language) {
 
 function createProjectCard(repo) {
   const langColor = getLanguageColor(repo.language);
+  const language = repo.language || 'Other';
+  const displayLanguage = language === 'Other' ? 'Code' : language;
   return `
-    <div class="project-card">
+    <div class="project-card" data-language="${language}">
       <h3 class="project-name">${repo.name}</h3>
       <p class="project-desc">${repo.description || ''}</p>
       <div class="project-meta">
         <div class="project-lang">
           <span class="lang-dot" style="background-color: ${langColor}"></span>
-          <span>${repo.language || 'Code'}</span>
+          <span>${displayLanguage}</span>
         </div>
         <a href="${repo.html_url}" target="_blank" class="project-link">View Code</a>
       </div>
@@ -160,6 +201,33 @@ function initHeroCTA() {
       }
     });
   }
+}
+
+// Project Filters Logic
+function initProjectFilters() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-filter');
+      
+      // Update active button
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      
+      // Filter projects
+      const projectCards = document.querySelectorAll('.project-card');
+      projectCards.forEach(card => {
+        const language = card.getAttribute('data-language');
+        
+        if (filter === 'all' || language === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
 }
 
 // Active Navigation Logic
@@ -271,5 +339,11 @@ function setLanguage(lang) {
   const cvDownload = document.getElementById('cv-download');
   if (cvDownload) {
     cvDownload.href = lang === 'en' ? '/assets/cvs/CV - Matías Carabella - EN.pdf' : '/assets/cvs/CV - Matías Carabella - ES.pdf';
+  }
+  
+  // Update filter "All" button text
+  const allFilterBtn = document.querySelector('.filter-btn[data-filter="all"]');
+  if (allFilterBtn) {
+    allFilterBtn.textContent = translations[lang]['projects.filter.all'] || 'All';
   }
 }

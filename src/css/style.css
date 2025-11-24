@@ -561,6 +561,40 @@ img[alt="GitHub"] {
   margin: 0 auto;
 }
 
+.projects-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.filter-btn {
+  padding: 0.5rem 1.25rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 9999px;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.filter-btn:hover {
+  border-color: var(--primary-color);
+  background-color: var(--bg-color);
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
@@ -579,13 +613,17 @@ img[alt="GitHub"] {
   border: 1px solid var(--card-border);
   border-radius: 1rem;
   padding: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
   opacity: 1;
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
+}
+
+.project-card.hidden {
+  display: none;
 }
 
 .project-card:hover {
