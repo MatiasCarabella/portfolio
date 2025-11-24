@@ -166,25 +166,45 @@ function initHeroCTA() {
 function initActiveNavigation() {
   const sections = document.querySelectorAll('section[id], main[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
+  const logo = document.querySelector('.logo');
+  const heroSection = document.querySelector('.hero');
 
   function updateActiveNav() {
     let current = '';
     const scrollY = window.scrollY || window.pageYOffset;
 
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
-      if (scrollY >= sectionTop - 200) {
-        current = section.getAttribute('id');
+    // Check if we're in the hero section (top of page)
+    if (heroSection && scrollY < heroSection.offsetHeight - 200) {
+      // Highlight logo when in hero section
+      if (logo) {
+        logo.classList.add('active');
       }
-    });
+      // Remove active from all nav links
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+      });
+    } else {
+      // Remove active from logo when not in hero
+      if (logo) {
+        logo.classList.remove('active');
+      }
 
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
+      // Standard section detection
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    }
   }
 
   // Smooth scroll for nav links
