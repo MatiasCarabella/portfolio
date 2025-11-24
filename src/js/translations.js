@@ -41,7 +41,7 @@ export const translations = {
         'experience.cloud.jr.location': 'Buenos Aires, Argentina',
         'experience.cloud.jr.desc1': 'Design and development of integrations and middlewares between external systems and Zoho applications.',
         'experience.cloud.jr.desc2': 'Data modeling and execution of large-scale processes (importing, synchronization, and updates).',
-        'experience.cloud.jr.desc3': 'Functional and technical management of local and international projects, from planning to delivery.',
+        'experience.cloud.jr.desc3': 'Functional and technical management of domestic and international projects, from planning to delivery.',
         'experience.cloud.jr.desc4': 'Facilitation of Agile practices, leading daily stand-ups and sprint retrospective meetings.',
         'experience.cloud.tc.title': 'Technical Consultant',
         'experience.cloud.tc.date': 'February 2020 - July 2020 (6 months)',
