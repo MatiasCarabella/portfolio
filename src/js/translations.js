@@ -118,7 +118,7 @@ export const translations = {
         'about.title': 'Sobre Mí',
         'about.greeting': 'Hola! Soy Matías, un Desarrollador de Software de Argentina 🇦🇷',
         'about.paragraph1': 'Me especializo en desarrollo Backend y disfruto profundizar en inteligencia artificial y ciberseguridad, manteniéndome siempre actualizado con las tecnologías emergentes y mejores prácticas.',
-        'about.paragraph2': 'Actualmente trabajo como Software Engineer en <a href="https://investor.mercadolibre.com/" target="_blank" rel="noopener noreferrer">Mercado Libre</a>, donde me especializo en el desarrollo de aplicaciones seguras y escalables capaces de soportar millones de usuarios concurrentes. En simultáneo, estoy terminando de cursar la Licenciatura en Informática en la <a href="https://www.21.edu.ar" target="_blank" rel="noopener noreferrer">Universidad Siglo 21</a>.',
+        'about.paragraph2': 'Actualmente trabajo como Software Engineer en <a href="https://investor.mercadolibre.com/" target="_blank" rel="noopener noreferrer">Mercado Libre</a>, donde me enfoco en el desarrollo de aplicaciones seguras y escalables capaces de soportar millones de usuarios concurrentes. En simultáneo, estoy terminando de cursar la Licenciatura en Informática en la <a href="https://www.21.edu.ar" target="_blank" rel="noopener noreferrer">Universidad Siglo 21</a>.',
         'stack.title': 'Stack Tecnológico',
         'stack.languages': 'Lenguajes',
         'stack.frameworks': 'Frameworks y Librerías',
