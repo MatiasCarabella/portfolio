@@ -1,26 +1,4 @@
-import './style.css';
 import { ParticleSystem } from './particles.js';
-
-// Set theme immediately to prevent flash of white (runs before DOM loads)
-(function () {
-  const currentTheme = localStorage.getItem('theme');
-  const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-  if (currentTheme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.documentElement.style.backgroundColor = '#050505';
-  } else if (currentTheme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-    document.documentElement.style.backgroundColor = '#ffffff';
-  } else if (prefersDarkScheme.matches) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.documentElement.style.backgroundColor = '#050505';
-  } else {
-    // Default to light if no preference
-    document.documentElement.style.backgroundColor = '#ffffff';
-  }
-})();
-
 
 // Initialize Particles
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,18 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // Theme Logic
 function initTheme() {
   const themeToggle = document.getElementById('theme-toggle');
-  const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-  // Check for saved user preference, if any, on load of the website
-  const currentTheme = localStorage.getItem('theme');
-
-  if (currentTheme == 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  } else if (currentTheme == 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else if (prefersDarkScheme.matches) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  }
 
   themeToggle.addEventListener('click', function () {
     let theme = 'light';

@@ -7,44 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Matías Carabella | Software Engineer</title>
   <meta name="description" content="Portfolio of Matías Carabella, a Software Engineer.">
-  <script>
-    // Set theme immediately to prevent flash of white
-    (function () {
-      const currentTheme = localStorage.getItem('theme');
-      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-      if (currentTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.documentElement.style.backgroundColor = '#050505';
-      } else if (currentTheme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        document.documentElement.style.backgroundColor = '#ffffff';
-      } else if (prefersDarkScheme.matches) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.documentElement.style.backgroundColor = '#050505';
-      } else {
-        // Default to light if no preference
-        document.documentElement.style.backgroundColor = '#ffffff';
-      }
-    })();
-  </script>
-  <style>
-    /* Critical styles to prevent flash of unstyled content */
-    .nav-links a {
-      color: #f1f5f9;
-      text-decoration: none;
-    }
-
-    .social-links a {
-      color: #f1f5f9;
-      text-decoration: none;
-    }
-
-    [data-theme="light"] .nav-links a,
-    [data-theme="light"] .social-links a {
-      color: #1a1a1a;
-    }
-  </style>
+  <script src="/theme-loader.js"></script>
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
