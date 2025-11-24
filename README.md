@@ -59,6 +59,25 @@ npm run build
 
 The optimized files will be in the `dist` folder.
 
+## 🌐 Deployment
+
+This project is configured to automatically deploy to GitHub Pages using GitHub Actions.
+
+### Automatic Deployment
+
+Every push to the `main` branch will automatically:
+1. Build the project
+2. Deploy to GitHub Pages
+
+### Setup (One-time)
+
+1. Go to your repository Settings → Pages
+2. Under "Build and deployment":
+   - Source: **GitHub Actions**
+3. Push to main branch - deployment will happen automatically!
+
+Your site will be live at: `https://matiascarabella.github.io/portfolio/`
+
 ## 📝 License
 
 This project is open source and available under the [MIT License](LICENSE).
