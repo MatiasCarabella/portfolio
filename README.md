@@ -1,16 +1,17 @@
 # Portfolio
 
-My personal portfolio website showcasing my experience, projects, and technical skills as a Software Engineer.
+A modern, responsive portfolio website showcasing my experience, projects, and technical skills as a Software Engineer. Built with vanilla JavaScript and featuring smooth animations, dark/light themes, and bilingual support.
 
 ## 🚀 Features
 
-- **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
-- **Dark/Light Mode** - Toggle between themes with persistent preference
-- **Bilingual** - Full support for English and Spanish (EN/ES)
-- **Dynamic Projects** - Automatically fetches and displays GitHub repositories
-- **Interactive Filters** - Filter projects by programming language
-- **Smooth Animations** - Particle effects and smooth scroll navigation
-- **Performance Optimized** - Fast loading with minimal dependencies
+- **Responsive Design** - Fully responsive with mobile-optimized carousel and hamburger menu
+- **Dark/Light Mode** - Toggle between themes with persistent localStorage preference
+- **Bilingual** - Complete English and Spanish (EN/ES) support with instant switching
+- **Dynamic Projects** - Automatically fetches and displays GitHub repositories via API
+- **Interactive Filters** - Filter projects by programming language with smooth transitions
+- **Touch-Friendly Carousel** - Swipeable project carousel on mobile with peek views
+- **Smooth Animations** - Particle background effects and smooth scroll navigation
+- **Performance Optimized** - Fast loading with minimal dependencies and Vite bundling
 
 ## 🛠️ Tech Stack
 
@@ -21,12 +22,12 @@ My personal portfolio website showcasing my experience, projects, and technical 
 
 ## 🎨 Sections
 
-- **Hero** - Introduction with animated particle background
-- **About** - Brief overview of my background and interests
-- **Experience** - Detailed work history with company logos
-- **Tech Stack** - Technologies organized by category
-- **Projects** - GitHub repositories with language-based filtering
-- **CV** - Downloadable resume in PDF format
+- **Hero** - Eye-catching introduction with animated particle background and smooth scroll CTA
+- **About** - Personal introduction highlighting my background and current role
+- **Experience** - Comprehensive work history with company logos, role details, and achievements
+- **Tech Stack** - Technologies organized by category (Languages, Frameworks, Databases, Cloud, etc.)
+- **Projects** - Dynamic GitHub repositories with language-based filtering and mobile carousel
+- **CV** - Downloadable bilingual resume in PDF format (EN/ES)
 
 ## 🚦 Getting Started
 
@@ -89,3 +90,15 @@ Feel free to reach out:
 - **Email**: matias.carabella@outlook.com
 - **LinkedIn**: [linkedin.com/in/matiascarabella](https://www.linkedin.com/in/matiascarabella/)
 - **GitHub**: [github.com/MatiasCarabella](https://github.com/MatiasCarabella)
+
+## 🎯 Highlights
+
+- **Mobile-First Approach** - Hamburger menu with slide-in navigation and social links
+- **Smart Carousel** - Click side cards to navigate, swipe gestures, and visual focus indicators
+- **Active Navigation** - Navbar highlights current section with smooth transitions
+- **Accessibility** - Semantic HTML, ARIA labels, and keyboard navigation support
+- **GitHub Integration** - Projects automatically sync with your latest repositories
+
+---
+
+Made with ❤️ by Matías Carabella

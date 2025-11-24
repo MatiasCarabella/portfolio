@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fetch Projects (filters will be initialized automatically after fetch)
   fetchProjects();
+  
+  // Initialize Mobile Menu
+  initMobileMenu();
 });
 
 // Theme Logic
@@ -226,6 +229,19 @@ function initCarousel(projects) {
   
   const dots = carouselDots.querySelectorAll('.carousel-dot');
   
+  // Set initial state for all cards
+  cards.forEach((card, i) => {
+    if (i === 0) {
+      card.style.opacity = '1';
+      card.style.transform = 'scale(1)';
+      card.style.cursor = 'default';
+    } else {
+      card.style.opacity = '0.5';
+      card.style.transform = 'scale(0.95)';
+      card.style.cursor = 'pointer';
+    }
+  });
+  
   function updateCarousel(index) {
     currentIndex = index;
     const cardWidth = cards[0].offsetWidth;
@@ -273,9 +289,6 @@ function initCarousel(projects) {
         updateCarousel(index);
       }
     });
-    
-    // Add visual feedback for non-focused cards
-    card.style.cursor = 'pointer';
   });
   
   // Touch/swipe support
@@ -387,20 +400,83 @@ function updateCarouselFilter(filter) {
     `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`
   ).join('');
   
-  // Reset to first card
-  carouselTrack.style.transform = 'translateX(0)';
+  // Reset to first card and set visual states
+  carouselTrack.style.transform = 'translateX(16px)'; // 1rem padding
+  
+  // Set visual state for all visible cards
+  visibleCards.forEach((card, i) => {
+    if (i === 0) {
+      card.style.opacity = '1';
+      card.style.transform = 'scale(1)';
+      card.style.cursor = 'default';
+    } else {
+      card.style.opacity = '0.5';
+      card.style.transform = 'scale(0.95)';
+      card.style.cursor = 'pointer';
+    }
+  });
   
   // Re-attach dot listeners
   const dots = carouselDots.querySelectorAll('.carousel-dot');
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
       const index = parseInt(dot.getAttribute('data-index'));
-      const offset = -index * (visibleCards[0].offsetWidth + 24);
+      const cardWidth = visibleCards[0].offsetWidth;
+      const gap = 16;
+      const containerPadding = 16;
+      const offset = -(index * (cardWidth + gap)) + containerPadding;
       carouselTrack.style.transform = `translateX(${offset}px)`;
+      
+      // Update visual states
+      visibleCards.forEach((card, i) => {
+        if (i === index) {
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+          card.style.cursor = 'default';
+        } else {
+          card.style.opacity = '0.5';
+          card.style.transform = 'scale(0.95)';
+          card.style.cursor = 'pointer';
+        }
+      });
       
       dots.forEach((d, i) => {
         d.classList.toggle('active', i === index);
       });
+    });
+  });
+}
+
+// Mobile Menu Logic
+function initMobileMenu() {
+  const menuToggle = document.getElementById('mobile-menu-toggle');
+  const menuClose = document.getElementById('mobile-menu-close');
+  const menu = document.getElementById('mobile-menu');
+  const overlay = document.getElementById('mobile-menu-overlay');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
+  
+  if (!menuToggle || !menu || !overlay) return;
+  
+  function openMenu() {
+    menu.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeMenu() {
+    menu.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  menuToggle.addEventListener('click', openMenu);
+  menuClose.addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  
+  // Close menu when clicking a link
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      closeMenu();
     });
   });
 }
