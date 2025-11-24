@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Active Navigation
   initActiveNavigation();
 
+  // Initialize Hero CTA smooth scroll
+  initHeroCTA();
+
   // Fetch Projects
   fetchProjects();
 });
@@ -127,6 +130,36 @@ function renderPlaceholders(container) {
       </div>
     </div>
   `).join('');
+}
+
+// Hero CTA and Logo smooth scroll
+function initHeroCTA() {
+  const ctaButton = document.querySelector('.cta-button');
+  const logoButton = document.querySelector('.logo');
+  
+  if (ctaButton) {
+    ctaButton.addEventListener('click', (e) => {
+      const href = ctaButton.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const targetId = href.substring(1);
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  }
+
+  if (logoButton) {
+    logoButton.addEventListener('click', (e) => {
+      const href = logoButton.getAttribute('href');
+      if (href === '#') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
 }
 
 // Active Navigation Logic
