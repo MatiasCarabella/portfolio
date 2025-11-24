@@ -387,6 +387,6 @@ function setLanguage(lang) {
   // Update CV download link
   const cvDownload = document.getElementById('cv-download');
   if (cvDownload) {
-    cvDownload.href = lang === 'en' ? 'CV - Matías Carabella - EN.pdf' : 'CV - Matías Carabella - ES.pdf';
+    cvDownload.href = lang === 'en' ? '/assets/cvs/CV - Matías Carabella - EN.pdf' : '/assets/cvs/CV - Matías Carabella - ES.pdf';
   }
 }
