@@ -765,6 +765,14 @@ img[alt="GitHub"] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  max-width: 100%;
+}
+
+@media (min-width: 769px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+  }
 }
 
 /* Carousel for mobile */
@@ -784,6 +792,7 @@ img[alt="GitHub"] {
   align-items: stretch;
   overflow: visible;
   width: 100%;
+  will-change: transform;
 }
 
 .carousel-track .project-card.hidden {
@@ -795,12 +804,6 @@ img[alt="GitHub"] {
   max-width: 80%;
   flex-shrink: 0;
   transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-
-
-.carousel-track .project-card:hover {
-  transform: scale(0.95);
 }
 
 .carousel-track .project-card:active {

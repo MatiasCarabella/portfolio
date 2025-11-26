@@ -7,6 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Matías Carabella | Software Engineer</title>
   <meta name="description" content="Portfolio of Matías Carabella, a Software Engineer.">
+  <meta name="keywords" content="Software Engineer, Backend Developer, Java, JavaScript, Full Stack, Portfolio">
+  <meta name="author" content="Matías Carabella">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Matías Carabella | Software Engineer">
+  <meta property="og:description" content="Portfolio showcasing my experience in Backend development, AI, and cybersecurity.">
+  <meta property="og:url" content="https://matiascarabella.github.io/portfolio/">
+  
   <script src="/theme-loader.js"></script>
   <link rel="stylesheet" href="/src/css/style.css">
 </head>
@@ -479,14 +488,20 @@
   <style>
     #app {
       opacity: 0;
+      transition: opacity 0.3s ease;
     }
   </style>
   <script>
-    window.addEventListener('load', function () {
-      setTimeout(function () {
-        document.getElementById('app').style.opacity = '1';
-      }, 20);
-    });
+    // Fade in app once loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        requestAnimationFrame(function() {
+          document.getElementById('app').style.opacity = '1';
+        });
+      });
+    } else {
+      document.getElementById('app').style.opacity = '1';
+    }
   </script>
   <script type="module" src="/src/js/main.js"></script>
 </body>

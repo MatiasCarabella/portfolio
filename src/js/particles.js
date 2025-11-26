@@ -1,26 +1,44 @@
 export class ParticleSystem {
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId);
+    if (!this.canvas) {
+      throw new Error(`Canvas element with id "${canvasId}" not found`);
+    }
+    
     this.ctx = this.canvas.getContext('2d');
     this.particles = [];
-    this.mouse = { x: null, y: null, radius: 150, lastX: null, lastY: null, lastMoveTime: 0 };
+    this.mouse = { x: null, y: null, radius: 125, lastMoveTime: 0 };
+    this.animationId = null;
+    
+    // Debounce resize for better performance
+    this.resizeTimeout = null;
 
     this.resize();
     this.init();
     this.animate();
 
-    window.addEventListener('resize', () => this.resize());
+    window.addEventListener('resize', () => {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(() => this.resize(), 150);
+    });
+    
     window.addEventListener('mousemove', (e) => {
-      this.mouse.lastX = this.mouse.x;
-      this.mouse.lastY = this.mouse.y;
       this.mouse.x = e.x;
       this.mouse.y = e.y;
       this.mouse.lastMoveTime = Date.now();
     });
+    
     window.addEventListener('mouseout', () => {
       this.mouse.x = null;
       this.mouse.y = null;
     });
+  }
+  
+  destroy() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
+    clearTimeout(this.resizeTimeout);
   }
 
   resize() {
@@ -46,31 +64,31 @@ export class ParticleSystem {
   }
 
   animate() {
-    requestAnimationFrame(() => this.animate());
+    this.animationId = requestAnimationFrame(() => this.animate());
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (let i = 0; i < this.particles.length; i++) {
-      this.particles[i].update(this.mouse);
-      this.particles[i].draw(this.ctx);
+    // Use for-of for better readability
+    for (const particle of this.particles) {
+      particle.update(this.mouse);
+      particle.draw(this.ctx);
     }
     this.connect();
   }
 
   connect() {
-    let opacityValue = 1;
+    const maxDistance = (this.canvas.width / 7) * (this.canvas.height / 7);
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const color = isDark ? '168, 85, 247' : '59, 130, 246';
+    
     for (let a = 0; a < this.particles.length; a++) {
-      for (let b = a; b < this.particles.length; b++) {
-        const distance = ((this.particles[a].x - this.particles[b].x) * (this.particles[a].x - this.particles[b].x)) +
-          ((this.particles[a].y - this.particles[b].y) * (this.particles[a].y - this.particles[b].y));
+      for (let b = a + 1; b < this.particles.length; b++) {
+        const dx = this.particles[a].x - this.particles[b].x;
+        const dy = this.particles[a].y - this.particles[b].y;
+        const distance = dx * dx + dy * dy;
 
-        if (distance < (this.canvas.width / 7) * (this.canvas.height / 7)) {
-          opacityValue = 1 - (distance / 20000);
-
-          // Get current theme color for lines
-          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-          const color = isDark ? '168, 85, 247' : '59, 130, 246'; // Purple or Primary Blue
-
-          this.ctx.strokeStyle = `rgba(${color}, ${opacityValue * 0.05})`; // Lower opacity for subtle lines
+        if (distance < maxDistance) {
+          const opacityValue = 1 - (distance / 20000);
+          this.ctx.strokeStyle = `rgba(${color}, ${opacityValue * 0.05})`;
           this.ctx.lineWidth = 1;
           this.ctx.beginPath();
           this.ctx.moveTo(this.particles[a].x, this.particles[a].y);
@@ -105,7 +123,7 @@ class Particle {
   }
 
   update(mouse) {
-    // Check if particle is still within canvas
+    // Bounce off edges
     if (this.x > this.canvas.width || this.x < 0) {
       this.directionX = -this.directionX;
     }
@@ -113,31 +131,28 @@ class Particle {
       this.directionY = -this.directionY;
     }
 
-    // Check collision detection - mouse position / particle position
-    let dx = mouse.x - this.x;
-    let dy = mouse.y - this.y;
-    let distance = Math.sqrt(dx * dx + dy * dy);
+    // Mouse interaction
+    if (mouse.x !== null && mouse.y !== null) {
+      const dx = mouse.x - this.x;
+      const dy = mouse.y - this.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const isMoving = (Date.now() - mouse.lastMoveTime) < 100;
 
-    // Only react if mouse has moved recently (within 100ms)
-    const isMoving = (Date.now() - mouse.lastMoveTime) < 100;
-
-    if (isMoving && distance < mouse.radius + this.size) {
-      if (mouse.x < this.x && this.x < this.canvas.width - this.size * 10) {
-        this.x += 3;
-      }
-      if (mouse.x > this.x && this.x > this.size * 10) {
-        this.x -= 3;
-      }
-      if (mouse.y < this.y && this.y < this.canvas.height - this.size * 10) {
-        this.y += 3;
-      }
-      if (mouse.y > this.y && this.y > this.size * 10) {
-        this.y -= 3;
+      if (isMoving && distance < mouse.radius + this.size) {
+        const repelForce = 3;
+        const minBoundary = this.size * 10;
+        const maxBoundaryX = this.canvas.width - minBoundary;
+        const maxBoundaryY = this.canvas.height - minBoundary;
+        
+        if (mouse.x < this.x && this.x < maxBoundaryX) this.x += repelForce;
+        if (mouse.x > this.x && this.x > minBoundary) this.x -= repelForce;
+        if (mouse.y < this.y && this.y < maxBoundaryY) this.y += repelForce;
+        if (mouse.y > this.y && this.y > minBoundary) this.y -= repelForce;
       }
     }
 
     // Move particle
-    this.x += this.directionX * 0.2; // Slower speed factor
+    this.x += this.directionX * 0.2;
     this.y += this.directionY * 0.2;
   }
 }

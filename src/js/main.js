@@ -1,55 +1,63 @@
 import { ParticleSystem } from './particles.js';
 import { translations } from './translations.js';
 
+// Constants
+const CONFIG = {
+  GITHUB_USERNAME: 'MatiasCarabella',
+  CAROUSEL_GAP: 16,
+  CAROUSEL_PADDING: 16,
+  SWIPE_THRESHOLD: 30,
+  SWIPE_VELOCITY: 0.3,
+  SWIPE_MIN_DISTANCE: 80
+};
+
 // Initialize Particles
 document.addEventListener('DOMContentLoaded', () => {
-  new ParticleSystem('particles-canvas');
+  try {
+    new ParticleSystem('particles-canvas');
+  } catch (error) {
+    console.error('Failed to initialize particles:', error);
+  }
 
   // Set current year in footer
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const yearElement = document.getElementById('year');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
 
-  // Initialize Theme
+  // Initialize all features
   initTheme();
-
-  // Initialize Language
   initLanguage();
-
-  // Initialize Active Navigation
   initActiveNavigation();
-
-  // Initialize Hero CTA smooth scroll
   initHeroCTA();
-
-  // Fetch Projects (filters will be initialized automatically after fetch)
-  fetchProjects();
-  
-  // Initialize Mobile Menu
   initMobileMenu();
+  
+  // Fetch Projects (async, non-blocking)
+  fetchProjects().catch(error => {
+    console.error('Failed to fetch projects:', error);
+  });
 });
 
 // Theme Logic
 function initTheme() {
   const themeToggle = document.getElementById('theme-toggle');
+  if (!themeToggle) return;
 
-  themeToggle.addEventListener('click', function () {
-    let theme = 'light';
-    if (document.documentElement.getAttribute('data-theme') !== 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      theme = 'dark';
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      theme = 'light';
-    }
-    localStorage.setItem('theme', theme);
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
   });
 }
 
 // GitHub Projects Logic
 async function fetchProjects() {
   const projectsGrid = document.getElementById('projects-grid');
-  const username = 'MatiasCarabella';
-  // Fetch all repos (GitHub API max is 100 per page)
-  const apiUrl = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`;
+  if (!projectsGrid) return;
+  
+  const apiUrl = `https://api.github.com/users/${CONFIG.GITHUB_USERNAME}/repos?sort=updated&per_page=100`;
 
   try {
     const response = await fetch(apiUrl);
@@ -245,9 +253,7 @@ function initCarousel(projects) {
   function updateCarousel(index) {
     currentIndex = index;
     const cardWidth = cards[0].offsetWidth;
-    const gap = 16; // 1rem gap
-    const containerPadding = 16; // 1rem padding
-    const offset = -(index * (cardWidth + gap)) + containerPadding;
+    const offset = -(index * (cardWidth + CONFIG.CAROUSEL_GAP)) + CONFIG.CAROUSEL_PADDING;
     carouselTrack.style.transform = `translateX(${offset}px)`;
     
     // Update dots
@@ -354,11 +360,11 @@ function initCarousel(projects) {
     
     // Only trigger swipe if horizontal movement is greater than vertical
     // and movement is significant enough
-    if (Math.abs(diffX) > diffY && Math.abs(diffX) > 30) {
+    if (Math.abs(diffX) > diffY && Math.abs(diffX) > CONFIG.SWIPE_THRESHOLD) {
       // Fast swipe (velocity-based)
       const velocity = Math.abs(diffX) / timeDiff;
       
-      if (velocity > 0.3 || Math.abs(diffX) > 80) {
+      if (velocity > CONFIG.SWIPE_VELOCITY || Math.abs(diffX) > CONFIG.SWIPE_MIN_DISTANCE) {
         if (diffX > 0 && currentIndex < cards.length - 1) {
           updateCarousel(currentIndex + 1);
         } else if (diffX < 0 && currentIndex > 0) {
@@ -427,7 +433,7 @@ function updateCarouselFilter(filter) {
   ).join('');
   
   // Reset to first card and set visual states
-  carouselTrack.style.transform = 'translateX(16px)'; // 1rem padding
+  carouselTrack.style.transform = `translateX(${CONFIG.CAROUSEL_PADDING}px)`;
   
   // Set visual state for all visible cards
   visibleCards.forEach((card, i) => {
@@ -448,12 +454,10 @@ function updateCarouselFilter(filter) {
   
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
-      const index = parseInt(dot.getAttribute('data-index'));
+      const index = parseInt(dot.getAttribute('data-index'), 10);
       currentCarouselIndex = index;
       const cardWidth = visibleCards[0].offsetWidth;
-      const gap = 16;
-      const containerPadding = 16;
-      const offset = -(index * (cardWidth + gap)) + containerPadding;
+      const offset = -(index * (cardWidth + CONFIG.CAROUSEL_GAP)) + CONFIG.CAROUSEL_PADDING;
       carouselTrack.style.transform = `translateX(${offset}px)`;
       
       // Update visual states
@@ -520,9 +524,10 @@ function initMobileMenu() {
   const menuClose = document.getElementById('mobile-menu-close');
   const menu = document.getElementById('mobile-menu');
   const overlay = document.getElementById('mobile-menu-overlay');
-  const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
   
-  if (!menuToggle || !menu || !overlay) return;
+  if (!menuToggle || !menu || !overlay || !menuClose) return;
+  
+  const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
   
   function openMenu() {
     menu.classList.add('active');
