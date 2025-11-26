@@ -217,6 +217,11 @@ function initHeroCTA() {
   }
 }
 
+// Global carousel state
+let carouselState = {
+  currentIndex: 0
+};
+
 // Carousel Logic for Mobile
 function initCarousel(projects) {
   const carouselTrack = document.getElementById('carousel-track');
@@ -228,7 +233,7 @@ function initCarousel(projects) {
   carouselTrack.innerHTML = projects.map(repo => createProjectCard(repo)).join('');
   
   const cards = carouselTrack.querySelectorAll('.project-card');
-  let currentIndex = 0;
+  carouselState.currentIndex = 0;
   
   // Create dots
   carouselDots.innerHTML = projects.map((_, index) => 
@@ -251,18 +256,22 @@ function initCarousel(projects) {
   });
   
   function updateCarousel(index) {
-    currentIndex = index;
-    const cardWidth = cards[0].offsetWidth;
+    carouselState.currentIndex = index;
+    const visibleCards = Array.from(carouselTrack.querySelectorAll('.project-card:not(.hidden)'));
+    if (visibleCards.length === 0) return;
+    
+    const cardWidth = visibleCards[0].offsetWidth;
     const offset = -(index * (cardWidth + CONFIG.CAROUSEL_GAP)) + CONFIG.CAROUSEL_PADDING;
     carouselTrack.style.transform = `translateX(${offset}px)`;
     
     // Update dots
-    dots.forEach((dot, i) => {
+    const currentDots = carouselDots.querySelectorAll('.carousel-dot');
+    currentDots.forEach((dot, i) => {
       dot.classList.toggle('active', i === index);
     });
     
-    // Update cursor style and visual state for cards
-    cards.forEach((card, i) => {
+    // Update cursor style and visual state for visible cards only
+    visibleCards.forEach((card, i) => {
       card.style.cursor = i === index ? 'default' : 'pointer';
       
       // Reset all cards first
@@ -298,7 +307,7 @@ function initCarousel(projects) {
       const visualIndex = visibleCards.indexOf(card);
       
       // Only advance if clicking on a non-focused card (side cards)
-      if (visualIndex !== -1 && visualIndex !== currentIndex) {
+      if (visualIndex !== -1 && visualIndex !== carouselState.currentIndex) {
         updateCarousel(visualIndex);
       }
     });
@@ -365,10 +374,10 @@ function initCarousel(projects) {
       const velocity = Math.abs(diffX) / timeDiff;
       
       if (velocity > CONFIG.SWIPE_VELOCITY || Math.abs(diffX) > CONFIG.SWIPE_MIN_DISTANCE) {
-        if (diffX > 0 && currentIndex < maxIndex) {
-          updateCarousel(currentIndex + 1);
-        } else if (diffX < 0 && currentIndex > 0) {
-          updateCarousel(currentIndex - 1);
+        if (diffX > 0 && carouselState.currentIndex < maxIndex) {
+          updateCarousel(carouselState.currentIndex + 1);
+        } else if (diffX < 0 && carouselState.currentIndex > 0) {
+          updateCarousel(carouselState.currentIndex - 1);
         }
       }
     }
@@ -432,6 +441,9 @@ function updateCarouselFilter(filter) {
     `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}" aria-label="Go to project ${index + 1}"></button>`
   ).join('');
   
+  // Reset carousel state to first visible card
+  carouselState.currentIndex = 0;
+  
   // Reset to first card and set visual states
   carouselTrack.style.transform = `translateX(${CONFIG.CAROUSEL_PADDING}px)`;
   
@@ -448,20 +460,22 @@ function updateCarouselFilter(filter) {
     }
   });
   
-  // Re-attach dot listeners and card click handlers
+  // Re-attach dot listeners using the shared updateCarousel function from initCarousel
   const dots = carouselDots.querySelectorAll('.carousel-dot');
-  let currentCarouselIndex = 0;
-  
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
       const index = parseInt(dot.getAttribute('data-index'), 10);
-      currentCarouselIndex = index;
-      const cardWidth = visibleCards[0].offsetWidth;
+      carouselState.currentIndex = index;
+      
+      const currentVisibleCards = Array.from(carouselTrack.querySelectorAll('.project-card:not(.hidden)'));
+      if (currentVisibleCards.length === 0) return;
+      
+      const cardWidth = currentVisibleCards[0].offsetWidth;
       const offset = -(index * (cardWidth + CONFIG.CAROUSEL_GAP)) + CONFIG.CAROUSEL_PADDING;
       carouselTrack.style.transform = `translateX(${offset}px)`;
       
       // Update visual states
-      visibleCards.forEach((card, i) => {
+      currentVisibleCards.forEach((card, i) => {
         if (i === index) {
           card.style.opacity = '1';
           card.style.transform = 'scale(1)';
@@ -476,44 +490,6 @@ function updateCarouselFilter(filter) {
       dots.forEach((d, i) => {
         d.classList.toggle('active', i === index);
       });
-    });
-  });
-  
-  // Re-attach card click handlers for filtered cards
-  visibleCards.forEach((card, visualIndex) => {
-    const newCard = card.cloneNode(true);
-    card.parentNode.replaceChild(newCard, card);
-    visibleCards[visualIndex] = newCard; // Update reference
-    
-    newCard.addEventListener('click', (e) => {
-      if (e.target.closest('a')) return;
-      
-      if (visualIndex !== currentCarouselIndex) {
-        currentCarouselIndex = visualIndex;
-        const cardWidth = newCard.offsetWidth;
-        const gap = 16;
-        const containerPadding = 16;
-        const offset = -(visualIndex * (cardWidth + gap)) + containerPadding;
-        carouselTrack.style.transform = `translateX(${offset}px)`;
-        
-        // Update visual states
-        visibleCards.forEach((c, i) => {
-          if (i === visualIndex) {
-            c.style.opacity = '1';
-            c.style.transform = 'scale(1)';
-            c.style.cursor = 'default';
-          } else {
-            c.style.opacity = '0.5';
-            c.style.transform = 'scale(0.95)';
-            c.style.cursor = 'pointer';
-          }
-        });
-        
-        // Update dots
-        dots.forEach((d, i) => {
-          d.classList.toggle('active', i === visualIndex);
-        });
-      }
     });
   });
 }
