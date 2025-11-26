@@ -279,17 +279,28 @@ function initCarousel(projects) {
   });
   
   // Click to advance (tap on card)
-  cards.forEach((card, index) => {
-    card.addEventListener('click', (e) => {
-      // Don't advance if clicking on a link
-      if (e.target.closest('a')) return;
+  function attachCardClickHandlers() {
+    const allCards = carouselTrack.querySelectorAll('.project-card:not(.hidden)');
+    const visibleCards = Array.from(allCards);
+    
+    allCards.forEach((card, visualIndex) => {
+      // Remove old listeners by cloning
+      const newCard = card.cloneNode(true);
+      card.parentNode.replaceChild(newCard, card);
       
-      // Only advance if clicking on a non-focused card (side cards)
-      if (index !== currentIndex) {
-        updateCarousel(index);
-      }
+      newCard.addEventListener('click', (e) => {
+        // Don't advance if clicking on a link
+        if (e.target.closest('a')) return;
+        
+        // Only advance if clicking on a non-focused card (side cards)
+        if (visualIndex !== currentIndex) {
+          updateCarousel(visualIndex);
+        }
+      });
     });
-  });
+  }
+  
+  attachCardClickHandlers();
   
   // Touch/swipe support
   let startX = 0;
@@ -298,8 +309,16 @@ function initCarousel(projects) {
   let currentY = 0;
   let isDragging = false;
   let startTime = 0;
+  let touchedCard = null;
   
   carouselTrack.addEventListener('touchstart', (e) => {
+    // Check if touch started on a card
+    touchedCard = e.target.closest('.project-card');
+    if (!touchedCard) {
+      isDragging = false;
+      return;
+    }
+    
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
     startTime = Date.now();
@@ -307,7 +326,7 @@ function initCarousel(projects) {
   });
   
   carouselTrack.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
+    if (!isDragging || !touchedCard) return;
     currentX = e.touches[0].clientX;
     currentY = e.touches[0].clientY;
     
@@ -321,7 +340,12 @@ function initCarousel(projects) {
   }, { passive: false });
   
   carouselTrack.addEventListener('touchend', () => {
-    if (!isDragging) return;
+    if (!isDragging || !touchedCard) {
+      touchedCard = null;
+      isDragging = false;
+      return;
+    }
+    
     isDragging = false;
     
     const diffX = startX - currentX;
@@ -342,6 +366,8 @@ function initCarousel(projects) {
         }
       }
     }
+    
+    touchedCard = null;
   });
 }
 
@@ -416,11 +442,14 @@ function updateCarouselFilter(filter) {
     }
   });
   
-  // Re-attach dot listeners
+  // Re-attach dot listeners and card click handlers
   const dots = carouselDots.querySelectorAll('.carousel-dot');
+  let currentCarouselIndex = 0;
+  
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
       const index = parseInt(dot.getAttribute('data-index'));
+      currentCarouselIndex = index;
       const cardWidth = visibleCards[0].offsetWidth;
       const gap = 16;
       const containerPadding = 16;
@@ -443,6 +472,44 @@ function updateCarouselFilter(filter) {
       dots.forEach((d, i) => {
         d.classList.toggle('active', i === index);
       });
+    });
+  });
+  
+  // Re-attach card click handlers for filtered cards
+  visibleCards.forEach((card, visualIndex) => {
+    const newCard = card.cloneNode(true);
+    card.parentNode.replaceChild(newCard, card);
+    visibleCards[visualIndex] = newCard; // Update reference
+    
+    newCard.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      
+      if (visualIndex !== currentCarouselIndex) {
+        currentCarouselIndex = visualIndex;
+        const cardWidth = newCard.offsetWidth;
+        const gap = 16;
+        const containerPadding = 16;
+        const offset = -(visualIndex * (cardWidth + gap)) + containerPadding;
+        carouselTrack.style.transform = `translateX(${offset}px)`;
+        
+        // Update visual states
+        visibleCards.forEach((c, i) => {
+          if (i === visualIndex) {
+            c.style.opacity = '1';
+            c.style.transform = 'scale(1)';
+            c.style.cursor = 'default';
+          } else {
+            c.style.opacity = '0.5';
+            c.style.transform = 'scale(0.95)';
+            c.style.cursor = 'pointer';
+          }
+        });
+        
+        // Update dots
+        dots.forEach((d, i) => {
+          d.classList.toggle('active', i === visualIndex);
+        });
+      }
     });
   });
 }
