@@ -111,9 +111,9 @@ function generateFilters(projects) {
 
   // Generate filter buttons HTML
   const filtersHTML = [
-    `<button class="filter-btn active" data-filter="all" data-i18n="projects.filter.all">${allText}</button>`,
+    `<button class="filter-btn active" data-filter="all" data-i18n="projects.filter.all" aria-label="Show all projects">${allText}</button>`,
     ...sortedLanguages.map(lang => 
-      `<button class="filter-btn" data-filter="${lang}">${lang}</button>`
+      `<button class="filter-btn" data-filter="${lang}" aria-label="Filter by ${lang}">${lang}</button>`
     )
   ].join('');
 
@@ -232,7 +232,7 @@ function initCarousel(projects) {
   
   // Create dots
   carouselDots.innerHTML = projects.map((_, index) => 
-    `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`
+    `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}" aria-label="Go to project ${index + 1}"></button>`
   ).join('');
   
   const dots = carouselDots.querySelectorAll('.carousel-dot');
@@ -285,28 +285,24 @@ function initCarousel(projects) {
   });
   
   // Click to advance (tap on card)
-  function attachCardClickHandlers() {
-    const allCards = carouselTrack.querySelectorAll('.project-card:not(.hidden)');
-    const visibleCards = Array.from(allCards);
-    
-    allCards.forEach((card, visualIndex) => {
-      // Remove old listeners by cloning
-      const newCard = card.cloneNode(true);
-      card.parentNode.replaceChild(newCard, card);
+  cards.forEach((card, index) => {
+    card.addEventListener('click', (e) => {
+      // Don't advance if clicking on a link
+      if (e.target.closest('a')) return;
       
-      newCard.addEventListener('click', (e) => {
-        // Don't advance if clicking on a link
-        if (e.target.closest('a')) return;
-        
-        // Only advance if clicking on a non-focused card (side cards)
-        if (visualIndex !== currentIndex) {
-          updateCarousel(visualIndex);
-        }
-      });
+      // Check if card is hidden
+      if (card.classList.contains('hidden')) return;
+      
+      // Find the visual index among visible cards
+      const visibleCards = Array.from(carouselTrack.querySelectorAll('.project-card:not(.hidden)'));
+      const visualIndex = visibleCards.indexOf(card);
+      
+      // Only advance if clicking on a non-focused card (side cards)
+      if (visualIndex !== -1 && visualIndex !== currentIndex) {
+        updateCarousel(visualIndex);
+      }
     });
-  }
-  
-  attachCardClickHandlers();
+  });
   
   // Touch/swipe support
   let startX = 0;
@@ -358,6 +354,10 @@ function initCarousel(projects) {
     const diffY = Math.abs(startY - currentY);
     const timeDiff = Date.now() - startTime;
     
+    // Get visible cards count
+    const visibleCards = carouselTrack.querySelectorAll('.project-card:not(.hidden)');
+    const maxIndex = visibleCards.length - 1;
+    
     // Only trigger swipe if horizontal movement is greater than vertical
     // and movement is significant enough
     if (Math.abs(diffX) > diffY && Math.abs(diffX) > CONFIG.SWIPE_THRESHOLD) {
@@ -365,7 +365,7 @@ function initCarousel(projects) {
       const velocity = Math.abs(diffX) / timeDiff;
       
       if (velocity > CONFIG.SWIPE_VELOCITY || Math.abs(diffX) > CONFIG.SWIPE_MIN_DISTANCE) {
-        if (diffX > 0 && currentIndex < cards.length - 1) {
+        if (diffX > 0 && currentIndex < maxIndex) {
           updateCarousel(currentIndex + 1);
         } else if (diffX < 0 && currentIndex > 0) {
           updateCarousel(currentIndex - 1);
@@ -429,7 +429,7 @@ function updateCarouselFilter(filter) {
   
   // Update dots to match visible cards
   carouselDots.innerHTML = visibleCards.map((_, index) => 
-    `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`
+    `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}" aria-label="Go to project ${index + 1}"></button>`
   ).join('');
   
   // Reset to first card and set visual states
