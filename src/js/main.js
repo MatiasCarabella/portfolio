@@ -148,16 +148,27 @@ function createProjectCard(repo) {
   const langColor = getLanguageColor(repo.language);
   const language = repo.language || 'Other';
   const displayLanguage = language === 'Other' ? 'Code' : language;
+  
+  // Escape HTML to prevent XSS
+  const escapedName = repo.name.replace(/[&<>"']/g, (char) => {
+    const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    return escapeMap[char];
+  });
+  const escapedDesc = (repo.description || '').replace(/[&<>"']/g, (char) => {
+    const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    return escapeMap[char];
+  });
+  
   return `
     <div class="project-card" data-language="${language}">
-      <h3 class="project-name">${repo.name}</h3>
-      <p class="project-desc">${repo.description || ''}</p>
+      <h3 class="project-name">${escapedName}</h3>
+      <p class="project-desc">${escapedDesc}</p>
       <div class="project-meta">
         <div class="project-lang">
           <span class="lang-dot" style="background-color: ${langColor}"></span>
           <span>${displayLanguage}</span>
         </div>
-        <a href="${repo.html_url}" target="_blank" class="project-link">View Code</a>
+        <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link">View Code</a>
       </div>
     </div>
   `;
@@ -294,7 +305,7 @@ function initCarousel(projects) {
   });
   
   // Click to advance (tap on card)
-  cards.forEach((card, index) => {
+  cards.forEach((card) => {
     card.addEventListener('click', (e) => {
       // Don't advance if clicking on a link
       if (e.target.closest('a')) return;
@@ -314,36 +325,38 @@ function initCarousel(projects) {
   });
   
   // Touch/swipe support
-  let startX = 0;
-  let startY = 0;
-  let currentX = 0;
-  let currentY = 0;
-  let isDragging = false;
-  let startTime = 0;
-  let touchedCard = null;
+  const touchState = {
+    startX: 0,
+    startY: 0,
+    currentX: 0,
+    currentY: 0,
+    isDragging: false,
+    startTime: 0,
+    touchedCard: null
+  };
   
   carouselTrack.addEventListener('touchstart', (e) => {
     // Check if touch started on a card
-    touchedCard = e.target.closest('.project-card');
-    if (!touchedCard) {
-      isDragging = false;
+    touchState.touchedCard = e.target.closest('.project-card');
+    if (!touchState.touchedCard) {
+      touchState.isDragging = false;
       return;
     }
     
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    startTime = Date.now();
-    isDragging = true;
+    touchState.startX = e.touches[0].clientX;
+    touchState.startY = e.touches[0].clientY;
+    touchState.startTime = Date.now();
+    touchState.isDragging = true;
   });
   
   carouselTrack.addEventListener('touchmove', (e) => {
-    if (!isDragging || !touchedCard) return;
-    currentX = e.touches[0].clientX;
-    currentY = e.touches[0].clientY;
+    if (!touchState.isDragging || !touchState.touchedCard) return;
+    touchState.currentX = e.touches[0].clientX;
+    touchState.currentY = e.touches[0].clientY;
     
     // Prevent vertical scroll if horizontal swipe is detected
-    const diffX = Math.abs(currentX - startX);
-    const diffY = Math.abs(currentY - startY);
+    const diffX = Math.abs(touchState.currentX - touchState.startX);
+    const diffY = Math.abs(touchState.currentY - touchState.startY);
     
     if (diffX > diffY && diffX > 10) {
       e.preventDefault();
@@ -351,17 +364,17 @@ function initCarousel(projects) {
   }, { passive: false });
   
   carouselTrack.addEventListener('touchend', () => {
-    if (!isDragging || !touchedCard) {
-      touchedCard = null;
-      isDragging = false;
+    if (!touchState.isDragging || !touchState.touchedCard) {
+      touchState.touchedCard = null;
+      touchState.isDragging = false;
       return;
     }
     
-    isDragging = false;
+    touchState.isDragging = false;
     
-    const diffX = startX - currentX;
-    const diffY = Math.abs(startY - currentY);
-    const timeDiff = Date.now() - startTime;
+    const diffX = touchState.startX - touchState.currentX;
+    const diffY = Math.abs(touchState.startY - touchState.currentY);
+    const timeDiff = Date.now() - touchState.startTime;
     
     // Get visible cards count
     const visibleCards = carouselTrack.querySelectorAll('.project-card:not(.hidden)');
@@ -382,7 +395,7 @@ function initCarousel(projects) {
       }
     }
     
-    touchedCard = null;
+    touchState.touchedCard = null;
   });
 }
 
@@ -559,7 +572,6 @@ function initActiveNavigation() {
       // Standard section detection
       sections.forEach(section => {
         const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
         if (scrollY >= sectionTop - 200) {
           current = section.getAttribute('id');
         }
